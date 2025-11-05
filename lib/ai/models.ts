@@ -1,4 +1,5 @@
-export const DEFAULT_CHAT_MODEL: string = "minimax/m2";
+// volte o default para algo que já existia no template:
+export const DEFAULT_CHAT_MODEL: string = "chat-model";
 
 export type ChatModel = {
   id: string;
@@ -7,6 +8,7 @@ export type ChatModel = {
 };
 
 export const chatModels: ChatModel[] = [
+  // mantenha o MiniMax na lista (vamos ligar ele no passo 2)
   {
     id: "minimax/m2",
     name: "MiniMax M2",
@@ -15,8 +17,7 @@ export const chatModels: ChatModel[] = [
   {
     id: "chat-model",
     name: "Grok Vision",
-    description:
-      "Advanced multimodal model with vision and text capabilities",
+    description: "Advanced multimodal model with vision and text capabilities",
   },
   {
     id: "chat-model-reasoning",
