@@ -1,9 +1,5 @@
 import { gateway } from "@ai-sdk/gateway";
-import {
-  customProvider,
-  extractReasoningMiddleware,
-  wrapLanguageModel,
-} from "ai";
+import { customProvider } from "ai";
 import { isTestEnvironment } from "../constants";
 
 export const myProvider = isTestEnvironment
@@ -25,12 +21,14 @@ export const myProvider = isTestEnvironment
     })()
   : customProvider({
       languageModels: {
-        "chat-model": gateway.languageModel("xai/grok-2-vision-1212"),
-        "chat-model-reasoning": wrapLanguageModel({
-          model: gateway.languageModel("xai/grok-3-mini"),
-          middleware: extractReasoningMiddleware({ tagName: "think" }),
-        }),
-        "title-model": gateway.languageModel("xai/grok-2-1212"),
-        "artifact-model": gateway.languageModel("xai/grok-2-1212"),
+        // 🚀 Principal modelo de chat (Minimax M2)
+        "chat-model": gateway.languageModel("minimax/minimax-m2"),
+
+        // Modelo opcional de raciocínio (se quiser separar)
+        "chat-model-reasoning": gateway.languageModel("minimax/minimax-m2"),
+
+        // Modelos de suporte (título e artefato) — podem usar o mesmo
+        "title-model": gateway.languageModel("minimax/minimax-m2"),
+        "artifact-model": gateway.languageModel("minimax/minimax-m2"),
       },
     });
