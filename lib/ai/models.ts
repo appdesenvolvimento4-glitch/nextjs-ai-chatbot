@@ -1,4 +1,4 @@
-export const DEFAULT_CHAT_MODEL: string = "chat-model";
+export const DEFAULT_CHAT_MODEL = "minimax/minimax-m2";
 
 export type ChatModel = {
   id: string;
@@ -8,14 +8,8 @@ export type ChatModel = {
 
 export const chatModels: ChatModel[] = [
   {
-    id: "chat-model",
-    name: "Grok Vision",
-    description: "Advanced multimodal model with vision and text capabilities",
-  },
-  {
-    id: "chat-model-reasoning",
-    name: "Grok Reasoning",
-    description:
-      "Uses advanced chain-of-thought reasoning for complex problems",
-  },
-];
+  id: "minimax/minimax-m2",
+  name: "Minimax M2",
+  description: "Modelo de linguagem da Minimax com suporte avançado em português e inglês",
+  capabilities: { reasoning: true, vision: true },
+}
