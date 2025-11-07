@@ -1,5 +1,3 @@
-// lib/ai/models.ts
-
 export type ChatModel = {
   id: string;
   name: string;
@@ -12,12 +10,12 @@ export type ChatModel = {
 
 export const chatModels: ChatModel[] = [
   {
-    id: "minimax/minimax-m2",
+    id: "chat-model", // precisa bater com o providers.ts
     name: "Minimax M2",
     description:
-      "Modelo de linguagem da Minimax com suporte avançado em português e inglês",
+      "Modelo de linguagem da Minimax com suporte avançado em português e inglês.",
     capabilities: { reasoning: true, vision: true },
   },
 ];
 
-export const DEFAULT_CHAT_MODEL = "minimax/minimax-m2";
+export const DEFAULT_CHAT_MODEL = "chat-model"; // também precisa ser igual
