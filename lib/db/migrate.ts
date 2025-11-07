@@ -7,6 +7,13 @@ config({
   path: ".env.local",
 });
 
+import 'dotenv/config';
+
+if (!process.env.POSTGRES_URL) {
+  console.log('⏭️  Skipping DB migrations: POSTGRES_URL not set');
+  process.exit(0);
+}
+
 const runMigrate = async () => {
   if (!process.env.POSTGRES_URL) {
     throw new Error("POSTGRES_URL is not defined");
