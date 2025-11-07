@@ -1,5 +1,5 @@
 // app/api/chat/route.ts
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 type ChatMessage = { role: 'system' | 'user' | 'assistant'; content: string };
 
