@@ -4,11 +4,11 @@ import { gateway as createGateway } from "@ai-sdk/gateway";
 import { customProvider } from "ai";
 import { isTestEnvironment } from "../constants";
 
-// Cria o gateway usando as variáveis de ambiente da Vercel
-const gw = createGateway({
-  baseURL: process.env.AI_GATEWAY_URL,
-  apiKey: process.env.AI_GATEWAY_KEY,
-});
+// Inicializa o gateway e aplica variáveis de ambiente se existirem
+const gw = createGateway();
+
+process.env.AI_GATEWAY_URL && (gw.baseURL = process.env.AI_GATEWAY_URL);
+process.env.AI_GATEWAY_KEY && (gw.apiKey = process.env.AI_GATEWAY_KEY);
 
 export const myProvider = isTestEnvironment
   ? (() => {
