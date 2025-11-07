@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     const { messages, stream }: { messages: ChatMessage[]; stream?: boolean } = await req.json();
 
     const baseUrl = getEnv('AI_GATEWAY_URL'); // deve terminar em /v1
-    const apiKey = getEnv('AI_GATEWAY_KEY');
+    const apiKey = getEnv('AI_GATEWAY_API_KEY');
     const model = process.env.AI_MODEL_ID || 'minimax/minimax-m2';
 
     const resp = await fetch(`${baseUrl}/chat/completions`, {
