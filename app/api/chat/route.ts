@@ -19,7 +19,18 @@ export async function POST(req: Request) {
 
     const baseUrl = getEnv('AI_GATEWAY_URL');
     const apiKey = getEnv('AI_GATEWAY_API_KEY');
-    const model = selectedChatModel || process.env.AI_MODEL_ID || 'minimax/minimax-m2';
+
+    // 🔥 NOVO — nossos modelos
+    const MODELS = {
+      flash: "meituan/longcat-flash-chat",
+      thinking: "meituan/longcat-thinking"
+    };
+
+    // 🔥 Seleção do modelo
+    let model = MODELS.flash;
+    if (selectedChatModel === "thinking") {
+      model = MODELS.thinking;
+    }
 
     const resp = await fetch(`${baseUrl}/chat/completions`, {
       method: 'POST',
@@ -27,21 +38,15 @@ export async function POST(req: Request) {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
-      // Streaming melhora UX; o front do template já entende SSE
       body: JSON.stringify({
         model,
         messages,
         stream: stream ?? true,
-        // Ajuste de sampling se quiser
         temperature: 0.8,
         top_p: 0.95,
       }),
-      // tempo de espera razoável p/ rede: 60s
-      // @ts-ignore (Edge Fetch aceita sinal/timeout em runtimes recentes)
-      // keepalive: true
     });
 
-    // Erros claros
     if (!resp.ok) {
       const text = await resp.text();
       return new Response(
@@ -53,7 +58,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // Se vier stream, repasse como SSE
     const contentType = resp.headers.get('content-type') || '';
     const isStream = contentType.includes('text/event-stream');
 
@@ -67,7 +71,6 @@ export async function POST(req: Request) {
       });
     }
 
-    // Fallback não-stream
     const data = await resp.json();
     return new Response(JSON.stringify(data), {
       headers: { 'Content-Type': 'application/json' },
