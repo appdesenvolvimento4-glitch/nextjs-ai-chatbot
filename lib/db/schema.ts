@@ -171,3 +171,56 @@ export const stream = pgTable(
 );
 
 export type Stream = InferSelectModel<typeof stream>;
+// ---------- AUTENTICAÇÃO (NEXTAUTH) ----------
+import { integer } from "drizzle-orm/pg-core";
+
+// Usuários (NextAuth / Login próprio)
+export const users = pgTable("users", {
+  id: varchar("id").primaryKey(),
+  name: varchar("name"),
+  email: varchar("email").notNull().unique(),
+  password: varchar("password"), // login via email/senha
+  image: text("image"),
+  createdAt: timestamp("created_at").defaultNow()
+});
+
+// Contas externas (Google, etc)
+export const accounts = pgTable("accounts", {
+  id: varchar("id").primaryKey(),
+  userId: varchar("user_id").notNull(),
+  type: varchar("type").notNull(),
+  provider: varchar("provider").notNull(),
+  providerAccountId: varchar("provider_account_id").notNull(),
+});
+
+// Sessões
+export const sessions = pgTable("sessions", {
+  id: varchar("id").primaryKey(),
+  sessionToken: varchar("sessionToken").notNull().unique(),
+  userId: varchar("userId").notNull(),
+  expires: timestamp("expires").notNull(),
+});
+
+// Tokens de verificação (email)
+export const verificationTokens = pgTable("verificationTokens", {
+  identifier: varchar("identifier").notNull(),
+  token: varchar("token").notNull(),
+  expires: timestamp("expires").notNull(),
+});
+
+// Limite diário de mensagens Thinking
+export const messageUsage = pgTable("message_usage", {
+  id: varchar("id").primaryKey(),
+  userId: varchar("user_id").notNull(),
+  date: varchar("date").notNull(),
+  count: integer("count").default(0),
+});
+
+// Plano do usuário (free ou pro)
+export const subscriptions = pgTable("subscriptions", {
+  id: varchar("id").primaryKey(),
+  userId: varchar("user_id").notNull(),
+  plan: varchar("plan").default("free"),
+  createdAt: timestamp("created_at").defaultNow()
+});
+
