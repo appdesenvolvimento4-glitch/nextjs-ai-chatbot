@@ -4,7 +4,7 @@ import Credentials from "next-auth/providers/credentials";
 
 import { compare } from "bcrypt-ts";
 import { DUMMY_PASSWORD } from "@/lib/constants";
-import { createGuestUser, getUser } from "@/lib/db/queries";
+import { getUser } from "@/lib/db/queries";
 
 export const authConfig: NextAuthConfig = {
   pages: {
@@ -12,18 +12,17 @@ export const authConfig: NextAuthConfig = {
     newUser: "/",
   },
 
+  // ----------------------------------------
+  // PROVIDERS
+  // ----------------------------------------
   providers: [
-    // ----------------------------------------
-    // 🔥 LOGIN COM GOOGLE
-    // ----------------------------------------
+    // Login com Google
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
 
-    // ----------------------------------------
-    // 🔥 LOGIN COM EMAIL + SENHA (Credentials)
-    // ----------------------------------------
+    // Login com email + senha
     Credentials({
       id: "credentials",
       name: "Email e senha",
@@ -60,9 +59,10 @@ export const authConfig: NextAuthConfig = {
         return { ...user, type: "regular" as const };
       },
     }),
+  ],
 
   // ----------------------------------------
-  // 🔥 CALLBACKS — adiciona user.id e user.type à sessão
+  // CALLBACKS — adiciona user.id e user.type à sessão
   // ----------------------------------------
   callbacks: {
     async jwt({ token, user }) {
@@ -82,4 +82,3 @@ export const authConfig: NextAuthConfig = {
     },
   },
 } satisfies NextAuthConfig;
-
