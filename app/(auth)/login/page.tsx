@@ -86,15 +86,6 @@ export default function Page() {
           >
             Continuar com Google
           </button>
-
-          {/* Guest Login (opcional) */}
-          <button
-            type="button"
-            onClick={() => signIn("guest", { callbackUrl: "/" })}
-            className="w-full rounded-md border px-4 py-2 text-sm font-medium hover:bg-gray-50 dark:hover:bg-zinc-800"
-          >
-            Entrar como convidado
-          </button>
         </div>
       </div>
     </div>
