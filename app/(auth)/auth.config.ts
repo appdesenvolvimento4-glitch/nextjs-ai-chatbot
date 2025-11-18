@@ -1,6 +1,5 @@
 import type { NextAuthConfig } from "next-auth";
 import Google from "next-auth/providers/google";
-import Resend from "next-auth/providers/resend";
 import Credentials from "next-auth/providers/credentials";
 
 import { compare } from "bcrypt-ts";
@@ -20,14 +19,6 @@ export const authConfig: NextAuthConfig = {
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
-
-    // ----------------------------------------
-    // 🔥 MAGIC LINK COM RESEND (opcional)
-    // ----------------------------------------
-    Resend({
-      apiKey: process.env.RESEND_API_KEY!,
-      from: "Login App <no-reply@seu-dominio.com>",
     }),
 
     // ----------------------------------------
