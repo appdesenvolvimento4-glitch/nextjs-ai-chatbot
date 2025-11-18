@@ -61,20 +61,6 @@ export const authConfig: NextAuthConfig = {
       },
     }),
 
-    // ----------------------------------------
-    // 🔥 LOGIN COMO CONVIDADO
-    // ----------------------------------------
-    Credentials({
-      id: "guest",
-      name: "Guest",
-      credentials: {},
-      async authorize() {
-        const [guestUser] = await createGuestUser();
-        return { ...guestUser, type: "guest" as const };
-      },
-    }),
-  ],
-
   // ----------------------------------------
   // 🔥 CALLBACKS — adiciona user.id e user.type à sessão
   // ----------------------------------------
