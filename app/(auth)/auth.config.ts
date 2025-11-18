@@ -24,7 +24,6 @@ export const authConfig: NextAuthConfig = {
 
     // ----------------------------------------
     // 🔥 MAGIC LINK COM RESEND (opcional)
-    // Para usar: configure RESEND_API_KEY na Vercel
     // ----------------------------------------
     Resend({
       apiKey: process.env.RESEND_API_KEY!,
@@ -91,22 +90,19 @@ export const authConfig: NextAuthConfig = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        // @ts-expect-error
-        token.id = user.id;
-        // @ts-expect-error
-        token.type = user.type;
+        (token as any).id = (user as any).id;
+        (token as any).type = (user as any).type;
       }
       return token;
     },
 
     async session({ session, token }) {
       if (session.user) {
-        // @ts-expect-error
-        session.user.id = token.id as string;
-        // @ts-expect-error
-        session.user.type = token.type as "guest" | "regular";
+        (session.user as any).id = (token as any).id;
+        (session.user as any).type = (token as any).type;
       }
       return session;
     },
   },
 } satisfies NextAuthConfig;
+
