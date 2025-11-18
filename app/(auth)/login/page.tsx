@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import { useActionState, useEffect, useState } from "react";
 
 import { AuthForm } from "@/components/auth-form";
@@ -41,8 +41,7 @@ export default function Page() {
       updateSession();
       router.refresh();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.status]);
+  }, [state.status, updateSession, router]);
 
   const handleSubmit = (formData: FormData) => {
     setEmail(formData.get("email") as string);
@@ -52,14 +51,18 @@ export default function Page() {
   return (
     <div className="flex h-dvh w-screen items-start justify-center bg-background pt-12 md:items-center md:pt-0">
       <div className="flex w-full max-w-md flex-col gap-12 overflow-hidden rounded-2xl">
+        {/* Header */}
         <div className="flex flex-col items-center justify-center gap-2 px-4 text-center sm:px-16">
           <h3 className="font-semibold text-xl dark:text-zinc-50">Sign In</h3>
           <p className="text-gray-500 text-sm dark:text-zinc-400">
             Use your email and password to sign in
           </p>
         </div>
+
+        {/* Email + Password Form */}
         <AuthForm action={handleSubmit} defaultEmail={email}>
           <SubmitButton isSuccessful={isSuccessful}>Sign in</SubmitButton>
+
           <p className="mt-4 text-center text-gray-600 text-sm dark:text-zinc-400">
             {"Don't have an account? "}
             <Link
@@ -71,6 +74,28 @@ export default function Page() {
             {" for free."}
           </p>
         </AuthForm>
+
+        {/* Social Login */}
+        <div className="mt-4 flex flex-col gap-3 px-4 sm:px-16">
+
+          {/* Google Login */}
+          <button
+            type="button"
+            onClick={() => signIn("google", { callbackUrl: "/" })}
+            className="w-full rounded-md border px-4 py-2 text-sm font-medium hover:bg-gray-50 dark:hover:bg-zinc-800"
+          >
+            Continuar com Google
+          </button>
+
+          {/* Guest Login (opcional) */}
+          <button
+            type="button"
+            onClick={() => signIn("guest", { callbackUrl: "/" })}
+            className="w-full rounded-md border px-4 py-2 text-sm font-medium hover:bg-gray-50 dark:hover:bg-zinc-800"
+          >
+            Entrar como convidado
+          </button>
+        </div>
       </div>
     </div>
   );
