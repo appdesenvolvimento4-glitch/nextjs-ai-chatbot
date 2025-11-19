@@ -21,7 +21,7 @@ export const chatModels = [
     capabilities: { reasoning: false, vision: false, longContext: false },
   },
   {
-    id: "qwen/qwen-max",
+    id: "alibaba/qwen3-max",
     key: "pro-chat",
     name: "Qwen Max",
     description: "Modelo premium avançado para uso geral.",
@@ -54,7 +54,7 @@ export const chatModels = [
     capabilities: { reasoning: true, vision: true, longContext: false },
   },
   {
-    id: "qwen/qwen-max-tools",
+    id: "alibaba/qwen3-max",
     key: "pro-tools",
     name: "Qwen Max Tools",
     description: "Modelo com agentes e ferramentas avançadas.",
