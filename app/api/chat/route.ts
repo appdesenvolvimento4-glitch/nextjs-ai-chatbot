@@ -10,7 +10,11 @@ function getEnv(name: string) {
 
 export async function POST(req: Request) {
   try {
-    const { messages, stream, selectedChatModel }: {
+    const {
+      messages,
+      stream,
+      selectedChatModel = "free-chat",
+    }: {
       messages: ChatMessage[];
       stream?: boolean;
       selectedChatModel?: string;
@@ -19,17 +23,10 @@ export async function POST(req: Request) {
     const baseUrl = getEnv('AI_GATEWAY_URL');
     const apiKey = getEnv('AI_GATEWAY_API_KEY');
 
-    // 🔥 MODELOS ALINHADOS COM providers.ts
-    const MODELS = {
-      "free-chat": "meituan/longcat-flash-chat",
-      "pro-chat": "qwen/qwen-max",
-      "pro-reasoning": "deepseek/deepseek-r1",
-      "pro-long-context": "meta-llama/llama-4-405b-instruct",
-      "pro-vision": "qwen/qwen-vl-max",
-      "pro-tools": "qwen/qwen-max",
-    };
+    // ❗️ NADA DE MAPEAR MODELOS AQUI
+    // O model enviado DEVE SER EXATAMENTE O PROVIDER ID definido no providers.ts
 
-    let model = MODELS[selectedChatModel || "free-chat"] || MODELS["free-chat"];
+    const model = selectedChatModel;
 
     const resp = await fetch(`${baseUrl}/chat/completions`, {
       method: 'POST',
@@ -74,9 +71,13 @@ export async function POST(req: Request) {
     return new Response(JSON.stringify(data), {
       headers: { 'Content-Type': 'application/json' },
     });
+
   } catch (err: any) {
     return new Response(
-      JSON.stringify({ error: 'Chat route failed', details: String(err?.message || err) }),
+      JSON.stringify({
+        error: 'Chat route failed',
+        details: String(err?.message || err),
+      }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
