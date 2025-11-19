@@ -31,23 +31,23 @@ export const myProvider = isTestEnvironment
         // 🔥 MODELOS PRO 
         // --------------------------
 
-        // Chat principal
-        "pro-chat": gateway.languageModel("qwen/qwen-max"),
+        // Chat Premium (principal)
+        "pro-chat": gateway.languageModel("alibaba/qwen3-max"),
 
-        // DeepSeek-R1 com reasoning stream
+        // DeepSeek-R1 (thinking profundo)
         "pro-reasoning": wrapLanguageModel({
           model: gateway.languageModel("deepseek/deepseek-r1"),
           middleware: extractReasoningMiddleware({ tagName: "think" }),
         }),
 
-        // Modelo para PDFs / contextos grandes
+        // Llama 4 (PDF / long context)
         "pro-long-context": gateway.languageModel("meta/llama-4-maverick"),
 
-        // Multimodal (imagem + texto)
-        "pro-vision": gateway.languageModel("qwen/qwen-vision-max"),
+        // Vision (se enviar imagem)
+        "pro-vision": gateway.languageModel("alibaba/qwen3-vl-instruct"),
 
-        // Agentes / Tools (se disponível)
-        "pro-tools": gateway.languageModel("qwen/qwen-max-tools"),
+        // Agentes / ferramentas / raciocínio estruturado
+        "pro-tools": gateway.languageModel("alibaba/qwen3-max"),
 
         // --------------------------
         // 🆓 MODELO FREE 
@@ -55,4 +55,3 @@ export const myProvider = isTestEnvironment
         "free-chat": gateway.languageModel("meituan/longcat-flash-chat"),
       },
     });
-
