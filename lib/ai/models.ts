@@ -69,3 +69,4 @@ export const MODELS = Object.fromEntries(
 export type ModelKey = keyof typeof MODELS;
 
 export const DEFAULT_CHAT_MODEL: ModelKey = "free-chat";
+
