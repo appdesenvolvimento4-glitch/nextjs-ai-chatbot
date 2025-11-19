@@ -57,3 +57,6 @@ export const MODELS = {
 } as const;
 
 export type ModelKey = keyof typeof MODELS;
+
+export const DEFAULT_CHAT_MODEL = "free-chat";
+
