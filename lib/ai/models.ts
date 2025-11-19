@@ -1,9 +1,9 @@
 export type ChatModel = {
-  id: string; // ID usado na API do seu backend / AI Gateway
-  key: string; // ID lógico interno
+  id: string; // ID usado na API do Vercel AI Gateway
+  key: ModelKey; // id lógico interno (garante Type Safety)
   name: string;
   description: string;
-  plan: "free" | "pro"; // <--- essencial
+  plan: "free" | "pro";
   capabilities?: {
     reasoning?: boolean;
     vision?: boolean;
@@ -11,12 +11,12 @@ export type ChatModel = {
   };
 };
 
-export const chatModels: ChatModel[] = [
+export const chatModels = [
   {
     id: "meituan/longcat-flash-chat",
     key: "free-chat",
     name: "LongCat Flash (Free)",
-    description: "Modelo rápido e gratuito da LongCat (texto simples).",
+    description: "Modelo rápido e gratuito (texto simples).",
     plan: "free",
     capabilities: { reasoning: false, vision: false, longContext: false },
   },
@@ -32,7 +32,8 @@ export const chatModels: ChatModel[] = [
     id: "deepseek/deepseek-r1",
     key: "pro-reasoning",
     name: "DeepSeek R1",
-    description: "Modelo especializado em raciocínio profundo (chain-of-thought).",
+    description:
+      "Modelo especializado em raciocínio profundo (Chain-of-Thought).",
     plan: "pro",
     capabilities: { reasoning: true, vision: false, longContext: false },
   },
@@ -40,9 +41,9 @@ export const chatModels: ChatModel[] = [
     id: "meta/llama-4-maverick",
     key: "pro-long-context",
     name: "Llama 4 Maverick (Long Context)",
-    description: "Modelo para PDFs, documentos longos e arquivos.",
+    description: "Modelo para PDFs e arquivos extensos.",
     plan: "pro",
-    capabilities: { reasoning: true, vision: false, longContext: true },
+    capabilities: { reasoning: true, longContext: true, vision: false },
   },
   {
     id: "qwen/qwen-vision-max",
@@ -50,23 +51,33 @@ export const chatModels: ChatModel[] = [
     name: "Qwen Vision Max",
     description: "Modelo multimodal com suporte a imagens.",
     plan: "pro",
-    capabilities: { reasoning: true, vision: true },
+    capabilities: { reasoning: true, vision: true, longContext: false },
   },
   {
     id: "qwen/qwen-max-tools",
     key: "pro-tools",
     name: "Qwen Max Tools",
-    description: "Modelo avançado com agentes e execução de ferramentas.",
+    description: "Modelo com agentes e ferramentas avançadas.",
     plan: "pro",
-    capabilities: { reasoning: true, vision: false },
+    capabilities: { reasoning: true, vision: false, longContext: false },
   },
-];
+] as const;
 
 export const MODELS = Object.fromEntries(
   chatModels.map((m) => [m.key, m.id])
-) as const;
+) as Record<string, string>;
 
-export type ModelKey = keyof typeof MODELS;
+export type ModelKey = (typeof chatModels)[number]["key"];
 
+// ---- DEFAULT MODEL DO SISTEMA ----
 export const DEFAULT_CHAT_MODEL: ModelKey = "free-chat";
 
+// ---- HELPERS ÚTEIS ----
+
+export function getModelByKey(key: ModelKey) {
+  return chatModels.find((m) => m.key === key);
+}
+
+export function getModelsByPlan(plan: "free" | "pro") {
+  return chatModels.filter((m) => m.plan === plan);
+}
