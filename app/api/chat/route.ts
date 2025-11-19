@@ -1,20 +1,28 @@
 // app/api/chat/route.ts
 export const runtime = "nodejs";
 
+import { MODELS, DEFAULT_CHAT_MODEL, getModelByKey, type ModelKey } from "@/lib/ai/models";
+import { getUser, incrementMessageCount, resetUserCounterIfNewDay, setUserPlan } from "@/lib/user";
+
 type ChatMessage = {
   role: "system" | "user" | "assistant";
   content: string;
 };
 
-import { getUser, incrementMessageCount, updateUserPlan, resetUserCounterIfNewDay } from "@/lib/user";
+const PRO_LIMIT = 5;
 
 export async function POST(req: Request) {
   try {
-    const { messages, stream, selectedChatModel, userId }: {
+    const {
+      messages,
+      stream,
+      selectedModelKey,
+      userId,
+    }: {
       messages: ChatMessage[];
       stream?: boolean;
-      selectedChatModel?: string;
-      userId: string; // importante: frontend envia o userId
+      selectedModelKey?: ModelKey;
+      userId: string;
     } = await req.json();
 
     if (!userId) {
@@ -24,60 +32,48 @@ export async function POST(req: Request) {
       });
     }
 
-    // 🔥 Carrega usuário e reseta contagem se for novo dia
+    // Load user from DB
     const user = await getUser(userId);
+
+    // Reset daily limit if needed
     await resetUserCounterIfNewDay(user);
 
-    // 📌 LIMITES DO PLANO
-    const PRO_LIMIT = 5;
     const isPro = user.plan === "pro";
+    const messagesUsed = user.messagesToday;
 
-    // Se estiver no PRO (trial) mas atingiu o limite
-    if (isPro && user.messagesToday >= PRO_LIMIT) {
+    // Enforce limit: 5 messages PRO/day
+    if (isPro && messagesUsed >= PRO_LIMIT) {
       return new Response(
         JSON.stringify({
           error: "Limite diário do plano PRO atingido.",
           upgrade: true,
           options: ["upgrade", "continuar_free"],
         }),
-        {
-          status: 403,
-          headers: { "Content-Type": "application/json" },
-        }
+        { status: 403, headers: { "Content-Type": "application/json" } }
       );
     }
 
-    // 📌 MODELOS PRO + FREE
-    const MODELS = {
-      FREE: "meituan/longcat-flash-chat",
-      PRO: {
-        qwen: "qwen/qwen3-max",
-        thinking: "deepseek/deepseek-r1",
-        long: "llama/llama-4-maverick",
-        vision: "vision/model", // ajustar quando tiver modelo real
-      },
-    };
+    // Determine which model should be used
+    // If user is PRO -> allow any model key
+    // If user is FREE -> enforce longcat always
+    let modelKey: ModelKey = DEFAULT_CHAT_MODEL;
 
-    let model = MODELS.FREE;
-
-    // 🧠 Lógica de modelo
-    if (isPro && user.messagesToday < PRO_LIMIT) {
-      switch (selectedChatModel) {
-        case "thinking":
-          model = MODELS.PRO.thinking;
-          break;
-        case "pdf":
-          model = MODELS.PRO.long;
-          break;
-        case "vision":
-          model = MODELS.PRO.vision;
-          break;
-        default:
-          model = MODELS.PRO.qwen;
-      }
+    if (isPro) {
+      modelKey = selectedModelKey || "pro-chat";
     }
 
-    // 🔥 Envia requisição ao AI Gateway
+    const modelInfo = getModelByKey(modelKey);
+
+    if (!modelInfo) {
+      return new Response(JSON.stringify({ error: "Invalid model key." }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const modelId = MODELS[modelKey];
+
+    // Send to AI Gateway
     const resp = await fetch(`${process.env.AI_GATEWAY_URL}/chat/completions`, {
       method: "POST",
       headers: {
@@ -85,14 +81,13 @@ export async function POST(req: Request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model,
+        model: modelId,
         messages,
         stream: stream ?? true,
         temperature: isPro ? 0.9 : 0.7,
       }),
     });
 
-    // ❌ Falha no Gateway
     if (!resp.ok) {
       const text = await resp.text();
       return new Response(
@@ -104,11 +99,11 @@ export async function POST(req: Request) {
       );
     }
 
-    // ⚡ Se resposta for streaming
-    const isStream = resp.headers.get("content-type")?.includes("text/event-stream");
-    if (isStream) {
-      // marcar contagem
-      await incrementMessageCount(userId);
+    // Increment message usage only when successful
+    await incrementMessageCount(userId);
+
+    // If streaming response
+    if (resp.headers.get("content-type")?.includes("text/event-stream")) {
       return new Response(resp.body, {
         headers: {
           "Content-Type": "text/event-stream; charset=utf-8",
@@ -118,11 +113,8 @@ export async function POST(req: Request) {
       });
     }
 
-    // 🔥 Mensagem normal (não-stream)
-    await incrementMessageCount(userId);
-    const data = await resp.json();
-
-    return new Response(JSON.stringify(data), {
+    const content = await resp.json();
+    return new Response(JSON.stringify(content), {
       headers: { "Content-Type": "application/json" },
     });
 
@@ -136,3 +128,4 @@ export async function POST(req: Request) {
     );
   }
 }
+
