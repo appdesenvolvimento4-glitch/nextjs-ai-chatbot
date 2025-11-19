@@ -1,31 +1,6 @@
-// lib/ai/providers.ts
+import { createClient } from "ai";
 
-import { gateway } from "@ai-sdk/gateway";
-import { customProvider } from "ai";
-import { isTestEnvironment } from "../constants";
-
-export const myProvider = isTestEnvironment
-  ? (() => {
-      const {
-        artifactModel,
-        chatModel,
-        reasoningModel,
-        titleModel,
-      } = require("./models.mock");
-      return customProvider({
-        languageModels: {
-          "chat-model": chatModel,
-          "chat-model-reasoning": reasoningModel,
-          "title-model": titleModel,
-          "artifact-model": artifactModel,
-        },
-      });
-    })()
-  : customProvider({
-      languageModels: {
-        "chat-model": gateway.languageModel("minimax/minimax-m2"),
-        "chat-model-reasoning": gateway.languageModel("minimax/minimax-m2"),
-        "title-model": gateway.languageModel("minimax/minimax-m2"),
-        "artifact-model": gateway.languageModel("minimax/minimax-m2"),
-      },
-    });
+export const ai = createClient({
+  apiKey: process.env.AI_GATEWAY_API_KEY!,
+  baseURL: process.env.AI_GATEWAY_URL!,
+});
