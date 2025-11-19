@@ -27,9 +27,7 @@ This is a guide for using artifacts tools: \`createDocument\` and \`updateDocume
 - Follow user instructions for which parts to modify
 
 **When NOT to use \`updateDocument\`:**
-- Immediately after creating a document
-
-Do not update document right after creating it. Wait for user feedback or request to update it.
+- Immediately after creating a document. 
 `;
 
 export const regularPrompt =
@@ -59,7 +57,8 @@ export const systemPrompt = ({
 }) => {
   const requestPrompt = getRequestPromptFromHints(requestHints);
 
-  if (selectedChatModel === "chat-model-reasoning") {
+  // 🔥 CORREÇÃO IMPORTANTE AQUI
+  if (selectedChatModel === "pro-reasoning") {
     return `${regularPrompt}\n\n${requestPrompt}`;
   }
 
@@ -79,17 +78,6 @@ You are a Python code generator that creates self-contained, executable code sni
 8. Don't use input() or other interactive functions
 9. Don't access files or network resources
 10. Don't use infinite loops
-
-Examples of good snippets:
-
-# Calculate factorial iteratively
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
-
-print(f"Factorial of 5 is: {factorial(5)}")
 `;
 
 export const sheetPrompt = `
@@ -113,8 +101,9 @@ export const updateDocumentPrompt = (
 ${currentContent}`;
 };
 
-export const titlePrompt = `\n
-    - you will generate a short title based on the first message a user begins a conversation with
-    - ensure it is not more than 80 characters long
-    - the title should be a summary of the user's message
-    - do not use quotes or colons`
+export const titlePrompt = `
+- you will generate a short title based on the first message a user begins a conversation with
+- ensure it is not more than 80 characters long
+- the title should be a summary of the user's message
+- do not use quotes or colons
+`;
