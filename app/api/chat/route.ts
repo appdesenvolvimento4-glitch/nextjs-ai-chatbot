@@ -1,4 +1,3 @@
-// app/api/chat/route.ts
 export const runtime = 'nodejs';
 
 type ChatMessage = { role: 'system' | 'user' | 'assistant'; content: string };
@@ -20,17 +19,17 @@ export async function POST(req: Request) {
     const baseUrl = getEnv('AI_GATEWAY_URL');
     const apiKey = getEnv('AI_GATEWAY_API_KEY');
 
-    // 🔥 NOVO — nossos modelos
+    // 🔥 MODELOS ALINHADOS COM providers.ts
     const MODELS = {
-      flash: "meituan/longcat-flash-chat",
-      thinking: "meituan/longcat-thinking"
+      "free-chat": "meituan/longcat-flash-chat",
+      "pro-chat": "qwen/qwen-max",
+      "pro-reasoning": "deepseek/deepseek-r1",
+      "pro-long-context": "meta-llama/llama-4-405b-instruct",
+      "pro-vision": "qwen/qwen-vl-max",
+      "pro-tools": "qwen/qwen-max",
     };
 
-    // 🔥 Seleção do modelo
-    let model = MODELS.flash;
-    if (selectedChatModel === "thinking") {
-      model = MODELS.thinking;
-    }
+    let model = MODELS[selectedChatModel || "free-chat"] || MODELS["free-chat"];
 
     const resp = await fetch(`${baseUrl}/chat/completions`, {
       method: 'POST',
