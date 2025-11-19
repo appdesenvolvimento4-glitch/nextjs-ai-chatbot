@@ -47,5 +47,13 @@ export const chatModels: ChatModel[] = [
   },
 ];
 
-export const DEFAULT_CHAT_MODEL = "free-chat";
+export const MODELS = {
+  "free-chat": "free-chat",
+  "pro-chat": "pro-chat",
+  "pro-reasoning": "pro-reasoning",
+  "pro-long-context": "pro-long-context",
+  "pro-vision": "pro-vision",
+  "pro-tools": "pro-tools",
+} as const;
 
+export type ModelKey = keyof typeof MODELS;
