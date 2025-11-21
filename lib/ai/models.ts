@@ -46,7 +46,7 @@ export const chatModels = [
     capabilities: { reasoning: true, longContext: true, vision: false },
   },
   {
-    id: "qwen/qwen-vision-max",
+    id: "alibaba/qwen3-vl-instruct",
     key: "pro-vision",
     name: "Qwen Vision Max",
     description: "Modelo multimodal com suporte a imagens.",
@@ -63,6 +63,8 @@ export const chatModels = [
   },
 ] as const;
 
+export type ChatModelId = (typeof chatModels)[number]["id"];
+
 export const MODELS = Object.fromEntries(
   chatModels.map((m) => [m.key, m.id])
 ) as Record<string, string>;
@@ -70,12 +72,20 @@ export const MODELS = Object.fromEntries(
 export type ModelKey = (typeof chatModels)[number]["key"];
 
 // ---- DEFAULT MODEL DO SISTEMA ----
-export const DEFAULT_CHAT_MODEL: ModelKey = "free-chat";
+export const DEFAULT_CHAT_MODEL: ChatModelId = chatModels[0].id;
 
 // ---- HELPERS ÚTEIS ----
 
 export function getModelByKey(key: ModelKey) {
   return chatModels.find((m) => m.key === key);
+}
+
+export const CHAT_MODEL_IDS = Array.from(
+  new Set(chatModels.map((m) => m.id))
+) as [ChatModelId, ...ChatModelId[]];
+
+export function getModelById(id: ChatModelId) {
+  return chatModels.find((m) => m.id === id);
 }
 
 export function getModelsByPlan(plan: "free" | "pro") {

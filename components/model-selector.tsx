@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { entitlementsByUserType } from "@/lib/ai/entitlements";
-import { chatModels } from "@/lib/ai/models";
+import { chatModels, type ChatModelId } from "@/lib/ai/models";
 import { cn } from "@/lib/utils";
 import { CheckCircleFillIcon, ChevronDownIcon } from "./icons";
 
@@ -21,7 +21,7 @@ export function ModelSelector({
   className,
 }: {
   session: Session;
-  selectedModelId: string;
+  selectedModelId: ChatModelId;
 } & React.ComponentProps<typeof Button>) {
   const [open, setOpen] = useState(false);
   const [optimisticModelId, setOptimisticModelId] =
@@ -34,13 +34,12 @@ export function ModelSelector({
     availableChatModelIds.includes(chatModel.id)
   );
 
-  const selectedChatModel = useMemo(
-    () =>
-      availableChatModels.find(
-        (chatModel) => chatModel.id === optimisticModelId
-      ),
-    [optimisticModelId, availableChatModels]
-  );
+  const selectedChatModel = useMemo(() => {
+    return (
+      availableChatModels.find((chatModel) => chatModel.id === optimisticModelId) ||
+      availableChatModels[0]
+    );
+  }, [optimisticModelId, availableChatModels]);
 
   return (
     <DropdownMenu onOpenChange={setOpen} open={open}>
