@@ -5,11 +5,11 @@ import {
   wrapLanguageModel,
 } from "ai";
 import { isTestEnvironment } from "../constants";
+import { MODELS } from "./models";
 
 export const myProvider = isTestEnvironment
   ? (() => {
       const {
-        artifactModel,
         chatModel,
         reasoningModel,
         titleModel,
@@ -17,41 +17,42 @@ export const myProvider = isTestEnvironment
 
       return customProvider({
         languageModels: {
-          "pro-chat": chatModel,
-          "pro-reasoning": reasoningModel,
-          "pro-long-context": titleModel,
-          "pro-artifact": artifactModel,
-          "free-chat": chatModel,
+          [MODELS["pro-chat"]]: chatModel,
+          [MODELS["pro-reasoning"]]: reasoningModel,
+          [MODELS["pro-long-context"]]: titleModel,
+          [MODELS["free-chat"]]: chatModel,
         },
       });
     })()
   : customProvider({
       languageModels: {
         // --------------------------
-        // 🔥 MODELOS PRO 
+        // 🔥 MODELOS PRO
         // --------------------------
 
         // Chat Premium (principal)
-        "pro-chat": gateway.languageModel("alibaba/qwen3-max"),
+        [MODELS["pro-chat"]]: gateway.languageModel(MODELS["pro-chat"]),
 
         // DeepSeek-R1 (thinking profundo)
-        "pro-reasoning": wrapLanguageModel({
-          model: gateway.languageModel("deepseek/deepseek-r1"),
+        [MODELS["pro-reasoning"]]: wrapLanguageModel({
+          model: gateway.languageModel(MODELS["pro-reasoning"]),
           middleware: extractReasoningMiddleware({ tagName: "think" }),
         }),
 
         // Llama 4 (PDF / long context)
-        "pro-long-context": gateway.languageModel("meta/llama-4-maverick"),
+        [MODELS["pro-long-context"]]: gateway.languageModel(
+          MODELS["pro-long-context"]
+        ),
 
         // Vision (se enviar imagem)
-        "pro-vision": gateway.languageModel("alibaba/qwen3-vl-instruct"),
+        [MODELS["pro-vision"]]: gateway.languageModel(MODELS["pro-vision"]),
 
         // Agentes / ferramentas / raciocínio estruturado
-        "pro-tools": gateway.languageModel("alibaba/qwen3-max"),
+        [MODELS["pro-tools"]]: gateway.languageModel(MODELS["pro-tools"]),
 
         // --------------------------
-        // 🆓 MODELO FREE 
+        // 🆓 MODELO FREE
         // --------------------------
-        "free-chat": gateway.languageModel("meituan/longcat-flash-chat"),
+        [MODELS["free-chat"]]: gateway.languageModel(MODELS["free-chat"]),
       },
     });

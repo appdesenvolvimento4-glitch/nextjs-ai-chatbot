@@ -1,13 +1,19 @@
-export type ChatModel = {
-  id: string; // ID usado na API do Vercel AI Gateway
-  key: ModelKey; // id lógico interno (garante Type Safety)
+type ChatModelDefinition = {
+  id: `${string}/${string}`;
+  key:
+    | "free-chat"
+    | "pro-chat"
+    | "pro-reasoning"
+    | "pro-long-context"
+    | "pro-vision"
+    | "pro-tools";
   name: string;
   description: string;
   plan: "free" | "pro";
-  capabilities?: {
-    reasoning?: boolean;
-    vision?: boolean;
-    longContext?: boolean;
+  capabilities: {
+    reasoning: boolean;
+    vision: boolean;
+    longContext: boolean;
   };
 };
 
@@ -46,7 +52,7 @@ export const chatModels = [
     capabilities: { reasoning: true, longContext: true, vision: false },
   },
   {
-    id: "qwen/qwen-vision-max",
+    id: "alibaba/qwen3-vl-instruct",
     key: "pro-vision",
     name: "Qwen Vision Max",
     description: "Modelo multimodal com suporte a imagens.",
@@ -61,21 +67,39 @@ export const chatModels = [
     plan: "pro",
     capabilities: { reasoning: true, vision: false, longContext: false },
   },
-] as const;
+] as const satisfies readonly ChatModelDefinition[];
 
-export const MODELS = Object.fromEntries(
-  chatModels.map((m) => [m.key, m.id])
-) as Record<string, string>;
+export type ChatModel = (typeof chatModels)[number];
+export type ChatModelId = ChatModel["id"];
+export type ModelKey = ChatModel["key"];
 
-export type ModelKey = (typeof chatModels)[number]["key"];
+export const CHAT_MODEL_IDS = [
+  ...new Set(chatModels.map((model) => model.id)),
+] as [ChatModelId, ...ChatModelId[]];
+
+export const MODELS = chatModels.reduce<Record<ModelKey, ChatModelId>>(
+  (accumulator, model) => {
+    accumulator[model.key] = model.id;
+    return accumulator;
+  },
+  {} as Record<ModelKey, ChatModelId>
+);
 
 // ---- DEFAULT MODEL DO SISTEMA ----
-export const DEFAULT_CHAT_MODEL: ModelKey = "free-chat";
+export const DEFAULT_CHAT_MODEL: ChatModelId = chatModels[0].id;
 
 // ---- HELPERS ÚTEIS ----
 
 export function getModelByKey(key: ModelKey) {
   return chatModels.find((m) => m.key === key);
+}
+
+export function getModelById(id: ChatModelId) {
+  return chatModels.find((m) => m.id === id);
+}
+
+export function isChatModelId(id: string): id is ChatModelId {
+  return (CHAT_MODEL_IDS as readonly string[]).includes(id);
 }
 
 export function getModelsByPlan(plan: "free" | "pro") {
