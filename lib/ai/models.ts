@@ -52,12 +52,11 @@ export const chatModels = [
 
 export type ChatModel = (typeof chatModels)[number];
 export type ChatModelId = ChatModel["id"];
+export type ModelKey = ChatModel["key"];
 
 export const MODELS = Object.fromEntries(
   chatModels.map((m) => [m.key, m.id])
 ) as Record<string, string>;
-
-export type ModelKey = ChatModel["key"];
 
 // ---- DEFAULT MODEL DO SISTEMA ----
 export const DEFAULT_CHAT_MODEL: ChatModelId = chatModels[0].id;
