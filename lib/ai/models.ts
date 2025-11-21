@@ -1,9 +1,9 @@
 export const chatModelIds = [
-  "longcat-free",
-  "qwen3-pro",
-  "deepseek-r1",
-  "llama4-maverick",
-  "vision-pro",
+  "meituan/longcat-flash-chat",
+  "alibaba/qwen3-max",
+  "deepseek/deepseek-r1",
+  "meta/llama-4-maverick",
+  "alibaba/qwen3-vl-thinking",
 ] as const;
 
 export type ChatModelId = (typeof chatModelIds)[number];
@@ -24,22 +24,22 @@ export type ChatModel = {
 
 export const chatModels: ChatModel[] = [
   {
-    id: "longcat-free",
-    name: "LongCat Flash (Free)",
+    id: "meituan/longcat-flash-chat",
+    name: "meituan/longcat-flash-chat (Free)",
     description: "Fast, lightweight chat for everyday use.",
     tier: "free",
     capabilities: {},
   },
   {
-    id: "qwen3-pro",
-    name: "Qwen3 Max (Pro)",
+    id: "alibaba/qwen3-max",
+    name: "alibaba/qwen3-max",
     description: "General-purpose Pro model with strong instruction following.",
     tier: "pro",
     capabilities: {},
   },
   {
-    id: "deepseek-r1",
-    name: "DeepSeek R1 (Reasoning)",
+    id: "deepseek/deepseek-r1",
+    name: "deepseek/deepseek-r1",
     description: "Reasoning-first model with structured chain-of-thought.",
     tier: "pro",
     capabilities: {
@@ -47,7 +47,7 @@ export const chatModels: ChatModel[] = [
     },
   },
   {
-    id: "llama4-maverick",
+    id: "meta/llama-4-maverick",
     name: "Llama 4 Maverick (Long Context)",
     description: "Extended context window ideal for long docs and PDFs.",
     tier: "pro",
@@ -56,8 +56,8 @@ export const chatModels: ChatModel[] = [
     },
   },
   {
-    id: "vision-pro",
-    name: "Vision Pro (Multimodal)",
+    id: "alibaba/qwen3-vl-thinking",
+    name: "alibaba/qwen3-vl-thinking (Multimodal)",
     description: "Handles images plus text for vision workflows.",
     tier: "pro",
     capabilities: {
