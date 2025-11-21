@@ -21,11 +21,11 @@ export const entitlementsByUserType: Record<UserType, Entitlements> = {
   regular: {
     maxMessagesPerDay: 100,
     availableChatModelIds: [
-      "longcat-free",
-      "qwen3-pro",
-      "deepseek-r1",
-      "llama4-maverick",
-      "vision-pro",
+      "meituan/longcat-flash-chat",
+      "alibaba/qwen3-max",
+      "deepseek/deepseek-r1",
+      "meta/llama-4-maverick",
+      "alibaba/qwen3-vl-thinking",
     ],
   },
 
