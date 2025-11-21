@@ -32,7 +32,10 @@ const createMockModel = (): LanguageModel => {
   } as unknown as LanguageModel;
 };
 
-export const chatModel = createMockModel();
-export const reasoningModel = createMockModel();
+export const longcatModel = createMockModel();
+export const qwenModel = createMockModel();
+export const deepseekModel = createMockModel();
+export const llamaModel = createMockModel();
+export const visionModel = createMockModel();
 export const titleModel = createMockModel();
 export const artifactModel = createMockModel();

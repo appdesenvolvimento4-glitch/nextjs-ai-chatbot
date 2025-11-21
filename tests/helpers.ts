@@ -51,8 +51,10 @@ export async function createAuthenticatedContext({
 
   const chatPage = new ChatPage(page);
   await chatPage.createNewChat();
-  await chatPage.chooseModelFromSelector("chat-model-reasoning");
-  await expect(chatPage.getSelectedModel()).resolves.toEqual("Reasoning model");
+  await chatPage.chooseModelFromSelector("deepseek-r1");
+  await expect(chatPage.getSelectedModel()).resolves.toEqual(
+    "DeepSeek R1 (Reasoning)"
+  );
 
   await page.waitForTimeout(1000);
   await context.storageState({ path: storageFile });
