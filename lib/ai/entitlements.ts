@@ -12,7 +12,7 @@ export const entitlementsByUserType: Record<UserType, Entitlements> = {
    */
   guest: {
     maxMessagesPerDay: 20,
-    availableChatModelIds: ["longcat-free"],
+    availableChatModelIds: ["meituan/longcat-flash-chat"],
   },
 
   /*
