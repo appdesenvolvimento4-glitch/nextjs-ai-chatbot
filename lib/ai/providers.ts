@@ -10,14 +10,20 @@ export const myProvider = isTestEnvironment
   ? (() => {
       const {
         artifactModel,
-        chatModel,
-        reasoningModel,
+        deepseekModel,
+        llamaModel,
+        qwenModel,
         titleModel,
+        visionModel,
+        longcatModel,
       } = require("./models.mock");
       return customProvider({
         languageModels: {
-          "chat-model": chatModel,
-          "chat-model-reasoning": reasoningModel,
+          "longcat-free": longcatModel,
+          "qwen3-pro": qwenModel,
+          "deepseek-r1": deepseekModel,
+          "llama4-maverick": llamaModel,
+          "vision-pro": visionModel,
           "title-model": titleModel,
           "artifact-model": artifactModel,
         },
@@ -25,12 +31,15 @@ export const myProvider = isTestEnvironment
     })()
   : customProvider({
       languageModels: {
-        "chat-model": gateway.languageModel("xai/grok-2-vision-1212"),
-        "chat-model-reasoning": wrapLanguageModel({
-          model: gateway.languageModel("xai/grok-3-mini"),
+        "longcat-free": gateway.languageModel("meituan/longcat-flash-chat"),
+        "qwen3-pro": gateway.languageModel("alibaba/qwen3-max"),
+        "deepseek-r1": wrapLanguageModel({
+          model: gateway.languageModel("deepseek/deepseek-r1"),
           middleware: extractReasoningMiddleware({ tagName: "think" }),
         }),
-        "title-model": gateway.languageModel("xai/grok-2-1212"),
-        "artifact-model": gateway.languageModel("xai/grok-2-1212"),
+        "llama4-maverick": gateway.languageModel("meta/llama-4-maverick"),
+        "vision-pro": gateway.languageModel("xai/grok-2-vision-1212"),
+        "title-model": gateway.languageModel("meituan/longcat-flash-chat"),
+        "artifact-model": gateway.languageModel("alibaba/qwen3-max"),
       },
     });
