@@ -17,20 +17,21 @@ export const myProvider = isTestEnvironment
         visionModel,
         longcatModel,
       } = require("./models.mock");
+
       return customProvider({
         languageModels: {
-          "longcat-free": "google/gemini-2.5-flash",
-          "qwen3-pro": "alibaba/qwen3-max",
-          "deepseek-r1": "deepseek/deepseek-r1",
-          "llama4-maverick": "meta/llama-4-maverick",
-          "vision-pro": "alibaba/qwen3-vl-thinking",
+          "longcat-free": longcatModel,
+          "qwen3-pro": qwenModel,
+          "deepseek-r1": deepseekModel,
+          "llama4-maverick": llamaModel,
+          "vision-pro": visionModel,
         },
       });
     })()
   : customProvider({
       languageModels: {
-        "google/gemini-2.5-flash": gateway.languageModel("google/gemini-2.5-flash"),
-        "alibaba/qwen3-max": gateway.languageModel("alibaba/qwen3-max"),
+        "longcat-free": gateway.languageModel("google/gemini-2.5-flash"),
+        "qwen3-pro": gateway.languageModel("alibaba/qwen3-max"),
         "deepseek-r1": wrapLanguageModel({
           model: gateway.languageModel("deepseek/deepseek-r1"),
           middleware: extractReasoningMiddleware({ tagName: "think" }),
