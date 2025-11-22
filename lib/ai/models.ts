@@ -1,5 +1,5 @@
 export const chatModelIds = [
-  "meituan/longcat-flash-chat",
+  "google/gemini-2.5-flash",
   "alibaba/qwen3-max",
   "deepseek/deepseek-r1",
   "meta/llama-4-maverick",
@@ -8,7 +8,7 @@ export const chatModelIds = [
 
 export type ChatModelId = (typeof chatModelIds)[number];
 
-export const DEFAULT_CHAT_MODEL: ChatModelId = "meituan/longcat-flash-chat";
+export const DEFAULT_CHAT_MODEL: ChatModelId = "google/gemini-2.5-flash";
 
 export type ChatModel = {
   id: ChatModelId;
@@ -24,8 +24,8 @@ export type ChatModel = {
 
 export const chatModels: ChatModel[] = [
   {
-    id: "meituan/longcat-flash-chat",
-    name: "meituan/longcat-flash-chat",
+    id: "google/gemini-2.5-flash",
+    name: "google/gemini-2.5-flash",
     description: "Fast, lightweight chat for everyday use.",
     tier: "free",
     capabilities: {},
