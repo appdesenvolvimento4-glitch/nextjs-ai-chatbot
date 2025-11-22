@@ -19,7 +19,7 @@ export const myProvider = isTestEnvironment
       } = require("./models.mock");
       return customProvider({
         languageModels: {
-          "longcat-free": meituan/longcat-flash-chat,
+          "longcat-free": google/gemini-2.5-flash,
           "qwen3-pro": alibaba/qwen3-max,
           "deepseek-r1": deepseek/deepseek-r1,
           "llama4-maverick": meta/llama-4-maverick,
@@ -29,7 +29,7 @@ export const myProvider = isTestEnvironment
     })()
   : customProvider({
       languageModels: {
-        "meituan/longcat-flash-chat": gateway.languageModel("meituan/longcat-flash-chat"),
+        "google/gemini-2.5-flash": gateway.languageModel("google/gemini-2.5-flash"),
         "alibaba/qwen3-max": gateway.languageModel("alibaba/qwen3-max"),
         "deepseek-r1": wrapLanguageModel({
           model: gateway.languageModel("deepseek/deepseek-r1"),
