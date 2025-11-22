@@ -38,7 +38,7 @@ export const myProvider = isTestEnvironment
           middleware: extractReasoningMiddleware({ tagName: "think" }),
         }),
         "llama4-maverick": gateway.languageModel("meta/llama-4-maverick"),
-        "vision-pro": gateway.languageModel("xai/grok-2-vision-1212"),
+        "vision-pro": gateway.languageModel("alibaba/qwen3-vl-thinking"),
         "title-model": gateway.languageModel("meituan/longcat-flash-chat"),
         "artifact-model": gateway.languageModel("alibaba/qwen3-max"),
       },
