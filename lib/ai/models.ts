@@ -8,7 +8,7 @@ export const chatModelIds = [
 
 export type ChatModelId = (typeof chatModelIds)[number];
 
-export const DEFAULT_CHAT_MODEL: "meituan/longcat-flash-chat";
+export const DEFAULT_CHAT_MODEL: ChatModelId = "meituan/longcat-flash-chat";
 
 export type ChatModel = {
   id: ChatModelId;
