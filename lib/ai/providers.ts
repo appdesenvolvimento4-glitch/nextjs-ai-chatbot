@@ -19,27 +19,23 @@ export const myProvider = isTestEnvironment
       } = require("./models.mock");
       return customProvider({
         languageModels: {
-          "longcat-free": longcatModel,
-          "qwen3-pro": qwenModel,
-          "deepseek-r1": deepseekModel,
-          "llama4-maverick": llamaModel,
-          "vision-pro": visionModel,
-          "title-model": titleModel,
-          "artifact-model": artifactModel,
+          "longcat-free": meituan/longcat-flash-chat,
+          "qwen3-pro": alibaba/qwen3-max,
+          "deepseek-r1": deepseek/deepseek-r1,
+          "llama4-maverick": meta/llama-4-maverick,
+          "vision-pro": alibaba/qwen3-vl-thinking,
         },
       });
     })()
   : customProvider({
       languageModels: {
-        "longcat-free": gateway.languageModel("meituan/longcat-flash-chat"),
-        "qwen3-pro": gateway.languageModel("alibaba/qwen3-max"),
+        "meituan/longcat-flash-chat": gateway.languageModel("meituan/longcat-flash-chat"),
+        "alibaba/qwen3-max": gateway.languageModel("alibaba/qwen3-max"),
         "deepseek-r1": wrapLanguageModel({
           model: gateway.languageModel("deepseek/deepseek-r1"),
           middleware: extractReasoningMiddleware({ tagName: "think" }),
         }),
         "llama4-maverick": gateway.languageModel("meta/llama-4-maverick"),
         "vision-pro": gateway.languageModel("alibaba/qwen3-vl-thinking"),
-        "title-model": gateway.languageModel("meituan/longcat-flash-chat"),
-        "artifact-model": gateway.languageModel("alibaba/qwen3-max"),
       },
     });
