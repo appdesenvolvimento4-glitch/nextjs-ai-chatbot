@@ -25,7 +25,7 @@ export type ChatModel = {
 export const chatModels: ChatModel[] = [
   {
     id: "google/gemini-2.5-flash-lite",
-    name: "google/gemini-2.5-flash-lite (Free)",
+    name: "google/gemini-2.5-flash-lite",
     description: "Fast, lightweight chat for everyday use.",
     tier: "free",
     capabilities: {},
@@ -48,7 +48,7 @@ export const chatModels: ChatModel[] = [
   },
   {
     id: "meta/llama-4-maverick",
-    name: "Llama 4 Maverick (Long Context)",
+    name: "meta/llama-4-maverick",
     description: "Extended context window ideal for long docs and PDFs.",
     tier: "pro",
     capabilities: {
@@ -57,7 +57,7 @@ export const chatModels: ChatModel[] = [
   },
   {
     id: "alibaba/qwen3-vl-thinking",
-    name: "alibaba/qwen3-vl-thinking (Multimodal)",
+    name: "alibaba/qwen3-vl-thinking",
     description: "Handles images plus text for vision workflows.",
     tier: "pro",
     capabilities: {
