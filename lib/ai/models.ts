@@ -48,7 +48,7 @@ export const chatModels: ChatModel[] = [
   },
   {
     id: "meta/llama-4-maverick",
-    name: "Llama 4 Maverick",
+    name: "meta/llama-4-maverick",
     description: "Extended context window ideal for long docs and PDFs.",
     tier: "pro",
     capabilities: {
