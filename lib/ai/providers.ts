@@ -20,23 +20,23 @@ export const myProvider = isTestEnvironment
 
       return customProvider({
         languageModels: {
-          "longcat-free": longcatModel,
-          "qwen3-pro": qwenModel,
-          "deepseek-r1": deepseekModel,
-          "llama4-maverick": llamaModel,
-          "vision-pro": visionModel,
+          "google/gemini-2.5-flash": google/gemini-2.5-flash,
+          "alibaba/qwen3-max": alibaba/qwen3-max,
+          "deepseek/deepseek-r1": deepseek/deepseek-r1,
+          "llama4-maverick": meta/llama-4-maverick,
+          "alibaba/qwen3-vl-thinking": alibaba/qwen3-vl-thinking,
         },
       });
     })()
   : customProvider({
       languageModels: {
-        "longcat-free": gateway.languageModel("google/gemini-2.5-flash"),
-        "qwen3-pro": gateway.languageModel("alibaba/qwen3-max"),
-        "deepseek-r1": wrapLanguageModel({
+        "google/gemini-2.5-flash": gateway.languageModel("google/gemini-2.5-flash"),
+        "alibaba/qwen3-max": gateway.languageModel("alibaba/qwen3-max"),
+        "deepseek/deepseek-r": wrapLanguageModel({
           model: gateway.languageModel("deepseek/deepseek-r1"),
           middleware: extractReasoningMiddleware({ tagName: "think" }),
         }),
-        "llama4-maverick": gateway.languageModel("meta/llama-4-maverick"),
-        "vision-pro": gateway.languageModel("alibaba/qwen3-vl-thinking"),
+        "meta/llama-4-maverick": gateway.languageModel("meta/llama-4-maverick"),
+        "alibaba/qwen3-vl-thinking": gateway.languageModel("alibaba/qwen3-vl-thinking"),
       },
     });
